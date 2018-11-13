@@ -1,0 +1,7 @@
+#include "q_serv.h"
+
+Q_Serv::Q_Serv()
+{
+
+}
+ 

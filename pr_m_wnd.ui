@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Pr_M_Wnd</class>
+ <widget class="QMainWindow" name="Pr_M_Wnd">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>870</width>
+    <height>654</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Pr_M_Wnd</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>841</width>
+      <height>591</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_task">
+     <attribute name="title">
+      <string>进程列表</string>
+     </attribute>
+     <widget class="QPushButton" name="btn_task">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>0</y>
+        <width>101</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>获取进程列表</string>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tw_proc">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>50</y>
+        <width>791</width>
+        <height>301</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QTableWidget" name="tw_mod">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>370</y>
+        <width>791</width>
+        <height>171</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_cmd">
+     <attribute name="title">
+      <string>cmd执行</string>
+     </attribute>
+     <widget class="QTextEdit" name="te_cmd">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>90</y>
+        <width>781</width>
+        <height>431</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Comic Sans MS</family>
+       </font>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="le_cmd">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>20</y>
+        <width>561</width>
+        <height>41</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_cmd">
+      <property name="geometry">
+       <rect>
+        <x>640</x>
+        <y>20</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>执行</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_reg">
+     <attribute name="title">
+      <string>注册表管理</string>
+     </attribute>
+     <widget class="QLineEdit" name="le_reg">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>30</y>
+        <width>641</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>HKEY_CURRENT_USER</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_reg">
+      <property name="geometry">
+       <rect>
+        <x>690</x>
+        <y>30</y>
+        <width>131</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>查询</string>
+      </property>
+     </widget>
+     <widget class="QTreeWidget" name="tr_reg">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>90</y>
+        <width>471</width>
+        <height>431</height>
+       </rect>
+      </property>
+      <column>
+       <property name="text">
+        <string notr="true">1</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QTableView" name="tv_reg">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>100</y>
+        <width>331</width>
+        <height>411</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>服务管理</string>
+     </attribute>
+     <widget class="QTableView" name="tv_serv">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>831</width>
+        <height>541</height>
+       </rect>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>870</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string/>
+    </property>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

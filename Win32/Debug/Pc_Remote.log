@@ -1,0 +1,60 @@
+﻿  Generate moc_predefs.h
+  Moc'ing pr_m_wnd.h...
+  Moc'ing q_cmd.h...
+  Uic'ing pr_m_wnd.ui...
+  main.cpp
+  pr_m_wnd.cpp
+pr_m_wnd.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+  q_cmd.cpp
+  q_reg.cpp
+q_reg.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+q_cmd.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\code\kerui\second\qt\pc_remote\q_task.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 pr_m_wnd.cpp)
+d:\code\kerui\second\qt\pc_remote\q_task.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 main.cpp)
+D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(958): error C2825: 'T': 当后面跟“::”时必须为类或命名空间 (编译源文件 q_reg.cpp)
+  q_reg.cpp(187): note: 参见对正在编译的类 模板 实例化“QtPrivate::QForeachContainer<Col_Data *>”的引用
+d:\code\kerui\second\qt\pc_remote\q_serv.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 main.cpp)
+d:\code\kerui\second\qt\pc_remote\q_serv.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 pr_m_wnd.cpp)
+D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(958): error C2510: “T”:“::”的左边必须是类/结构/联合 (编译源文件 q_reg.cpp)
+D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(958): error C3646: “i”: 未知重写说明符 (编译源文件 q_reg.cpp)
+D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(958): error C2059: 语法错误:“,” (编译源文件 q_reg.cpp)
+D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(958): error C2238: 意外的标记位于“;”之前 (编译源文件 q_reg.cpp)
+q_reg.cpp(187): error C2039: “i”: 不是“QtPrivate::QForeachContainer<Col_Data *>”的成员
+  D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(934): note: 参见“QtPrivate::QForeachContainer<Col_Data *>”的声明
+q_reg.cpp(187): error C2039: “e”: 不是“QtPrivate::QForeachContainer<Col_Data *>”的成员
+  D:\Qt\Qt5.9.6\5.9.6\msvc2015\include\QtCore/qglobal.h(934): note: 参见“QtPrivate::QForeachContainer<Col_Data *>”的声明
+  q_serv.cpp
+q_serv.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\code\kerui\second\qt\pc_remote\q_serv.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 q_serv.cpp)
+pr_m_wnd.cpp(66): error C3867: “Q_Task::read_proc_info”: 非标准语法；请使用 "&" 来创建指向成员的指针
+  q_task.cpp
+q_task.cpp : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+d:\code\kerui\second\qt\pc_remote\q_task.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 q_task.cpp)
+q_serv.cpp(26): error C2001: 常量中有换行符
+q_serv.cpp(27): error C2001: 常量中有换行符
+q_serv.cpp(28): error C2064: 项不会计算为接受 1 个参数的函数
+q_serv.cpp(29): error C2001: 常量中有换行符
+q_serv.cpp(30): error C2059: 语法错误:“}”
+q_serv.cpp(30): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+q_serv.cpp(30): error C2143: 语法错误: 缺少“)”(在“;”的前面)
+q_serv.cpp(34): error C2001: 常量中有换行符
+q_serv.cpp(35): error C2064: 项不会计算为接受 1 个参数的函数
+q_serv.cpp(40): error C2001: 常量中有换行符
+q_serv.cpp(41): error C2059: 语法错误:“}”
+q_serv.cpp(41): error C2143: 语法错误: 缺少“;”(在“}”的前面)
+q_serv.cpp(41): error C2143: 语法错误: 缺少“)”(在“;”的前面)
+q_serv.cpp(134): warning C4018: “<”: 有符号/无符号不匹配
+  moc_pr_m_wnd.cpp
+q_task.cpp(11): error C2001: 常量中有换行符
+q_task.cpp(12): error C2001: 常量中有换行符
+q_task.cpp(13): error C2440: “初始化”: 无法从“const char [9]”转换为“char *”
+  q_task.cpp(13): note: 从字符串文本转换将丢失 const 限定符(请参阅 /Zc:strictStrings)
+  moc_q_cmd.cpp
+q_task.cpp(13): error C2440: “初始化”: 无法从“const char [24]”转换为“char *”
+  q_task.cpp(13): note: 从字符串文本转换将丢失 const 限定符(请参阅 /Zc:strictStrings)
+q_task.cpp(13): error C2440: “初始化”: 无法从“const char [12]”转换为“char *”
+  q_task.cpp(13): note: 从字符串文本转换将丢失 const 限定符(请参阅 /Zc:strictStrings)
+q_task.cpp(13): error C2440: “初始化”: 无法从“const char [26]”转换为“char *”
+  q_task.cpp(13): note: 从字符串文本转换将丢失 const 限定符(请参阅 /Zc:strictStrings)
+d:\code\kerui\second\qt\pc_remote\q_task.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 .\GeneratedFiles\Debug\moc_pr_m_wnd.cpp)
+d:\code\kerui\second\qt\pc_remote\q_serv.h : warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失 (编译源文件 .\GeneratedFiles\Debug\moc_pr_m_wnd.cpp)

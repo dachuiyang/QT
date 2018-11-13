@@ -1,0 +1,17 @@
+#ifndef Q_SERVICES_H
+#define Q_SERVICES_H
+
+
+class Q_Services
+{
+public:
+    Q_Services();
+    
+    
+    
+    
+private:
+    void init();
+};
+
+#endif // Q_SERVICES_H
