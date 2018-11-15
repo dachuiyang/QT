@@ -1,0 +1,98 @@
+#ifndef IOCP_SERVER_H
+#define IOCP_SERVER_H
+
+#include <QObject>
+#include <QRunnable>
+#include <winsock2.h>
+
+#define BUF_SIZE 8 * 1024
+
+enum Em_Io_Type 
+{
+	IO_ACCEPT,
+	IO_READ,
+	IO_WRITE,
+};
+
+
+//单个io数据 类
+struct OverLapped_Ex 
+{
+    OverLapped_Ex(Em_Io_Type io_type) 
+	{
+        m_io_type = io_type;
+        ZeroMemory(m_sz_buf, BUF_SIZE);
+		ZeroMemory(&m_olap, sizeof(OVERLAPPED));
+	}
+    
+	OVERLAPPED m_olap;			 //重叠结构
+	Em_Io_Type m_io_type;		 //io类型
+	char m_sz_buf[BUF_SIZE];     //缓冲区
+};
+
+//单个句柄数据 类
+struct Per_Sock_Data 
+{
+    Per_Sock_Data() 
+	{
+		this->m_sock = INVALID_SOCKET;
+		this->m_acc_sock = INVALID_SOCKET;
+	}
+    
+    Per_Sock_Data(SOCKET h_sock) 
+	{
+        this->m_sock = INVALID_SOCKET;
+		this->m_sock = h_sock;
+	}
+    
+	SOCKET m_sock;        //当前socket
+	SOCKET m_acc_sock;    //接收的socket
+};
+
+class Iocp_Server:public QObject, public QRunnable
+{
+    Q_OBJECT
+    
+public:
+    Iocp_Server();
+    
+public:
+    virtual void run();
+    
+//public:
+//    int init_sock();
+//    int begin_listen();
+   
+public:
+    bool create_iocp(int n_thd = 0);
+    
+public:
+    Per_Sock_Data* bind_iocp(SOCKET h_sock, 
+                             int n_thd = 0);
+    
+public:
+    int post_recv(Per_Sock_Data* p_sock_data);
+    int post_send(char *p_sz_buf, DWORD dw_byte_size);
+    
+public:
+    int thd_pool_func();
+    
+    static void setB_stop_flag(bool value);
+    
+private:
+    static bool b_stop_flag = false;
+    
+private:
+    int m_n_port;          //监听的端口
+    bool m_b_stop_listen;  //停止监听的哨兵值
+    
+private:
+    SOCKET m_acc_sock;   //接收新连接的socket
+    
+private:
+    HANDLE m_h_iocp;
+    
+    
+};
+
+#endif // IOCP_SERVER_H

@@ -1,0 +1,288 @@
+#include <assert.h>
+#include "iocp_server.h"
+
+#define SOCK_VER 2
+#define PORT_NUM 9999
+
+Iocp_Server::Iocp_Server()
+{
+    this->m_h_iocp = 0;
+    this->m_acc_sock = 0;
+    
+    this->m_n_port = PORT_NUM;
+    this->m_b_stop_listen = false;
+}
+
+void Iocp_Server::run()
+{
+    
+}
+
+//int Iocp_Server::init_sock()
+//{
+//    //---------------初始化环境--------------------------
+//    int n_ret = 0;
+//    WSADATA wd = { 0 };
+
+//    n_ret = WSAStartup(MAKEWORD(SOCK_VER, 0), &wd);
+
+//    //初始化出错 或 当前版本不符合
+//    if (0 != n_ret || SOCK_VER != LOBYTE(wd.wVersion))
+//    {
+//        return -1;
+//    }
+
+//    //--------------建立socket-------------------
+//    SOCKET new_socket = 0;
+//    new_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+
+//    //创建socket 失败 我的哥
+//    if (INVALID_SOCKET == new_socket)
+//    {
+//        new_socket = 0;
+//        WSACleanup();
+//        return -2;
+//    }
+
+//    this->m_acc_sock = new_socket;
+//    return 0;
+//}
+
+//int Iocp_Server::begin_listen()
+//{
+
+//    int n_ret = 0;
+//    //--------------------bind---------------------------
+//    //建立结构体接收返回值
+//    sockaddr_in ser_addr = { 0 };
+
+//    ser_addr.sin_family = AF_INET;        //INTRL协议
+//    ser_addr.sin_port = htons(m_n_port);  //本机到网络转换
+
+//    //任意主机都可以连接
+//    ser_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);
+
+//    n_ret = bind(this->m_acc_sock,       //socket
+//                 (SOCKADDR*)&ser_addr,   //指定端口
+//                 sizeof(sockaddr_in));   //结构体大小
+
+//    //如果绑定失败
+//    if(SOCKET_ERROR == n_ret)
+//    {
+//        goto SOCK_ERR;
+//    }
+
+//    //--------------------listen------------
+//    n_ret = listen(this->m_acc_sock, SOMAXCONN);
+
+//    //监听失败
+//    if (SOCKET_ERROR == n_ret)
+//    {
+//        goto SOCK_ERR;
+//    }
+
+//    return 0;
+
+//SOCK_ERR:
+//    if (INVALID_SOCKET != this->m_acc_sock)
+//    {
+//        closesocket(this->m_acc_sock);
+//    }
+//    WSACleanup();
+//    return -3;
+//}
+
+bool Iocp_Server::create_iocp(int n_thd)
+{
+    //新建一个 重叠IO 的句柄  n_thd 默认为0 表示调度处理器数目线程
+    this->m_h_iocp = CreateIoCompletionPort(INVALID_HANDLE_VALUE,
+                                            NULL,
+                                            0,
+                                            n_thd);
+    
+    if (this->m_h_iocp == INVALID_HANDLE_VALUE)
+    {
+        return false;
+    }
+    
+    return true;
+}
+
+/*
+arg1:要绑定的socket
+arg2:进入消息队列的线程数
+*/
+Per_Sock_Data* Iocp_Server::bind_iocp(SOCKET h_sock, int n_thd)
+{
+    //初始化单句柄数据
+    Per_Sock_Data* p_sock_data = 0;
+    p_sock_data = new Per_Sock_Data(h_sock);
+    
+    //绑定完成端口和当前socket
+    CreateIoCompletionPort((HANDLE)h_sock,
+                           this->m_h_iocp,
+                           (ULONG_PTR)p_sock_data,
+                           n_thd);
+    
+    return p_sock_data;
+}
+
+/*投递接收请求
+ * 
+ * arg:单句柄数据
+ * ret(-1) 参数错误
+ * ret(-2) 投递出错
+ * ret(0)  成功
+*/
+int Iocp_Server::post_recv(Per_Sock_Data* p_sock_data)
+{
+    //参数健壮性检查
+    if(0 == p_sock_data)
+    {
+        return -1;
+    }
+    
+    //新建一个单个 io数据结构 类型是 read
+    OverLapped_Ex* p_olap = new OverLapped_Ex(IO_READ);
+    
+    //新建一个缓冲区结构 初始化指针成员 长度成员
+    WSABUF wsa_buf = {0};
+    wsa_buf.buf = p_olap->m_sz_buf;  
+    wsa_buf.len = BUF_SIZE;
+    
+    //初始化标记值 接受字节数 参数
+    DWORD dw_flags = 0;
+    DWORD dw_byte_recv = 0;
+    
+    
+    //发送recv请求  参数
+    //1：监听socket      
+    //2: lpBuffer---指向wsabuf 结构数组的指针 每个结构包含一个指向缓冲区的指针 和 缓冲区的长度
+    //3: dwBufferCount---  lpBuffer 数组中  WSABUF 结构的数目
+    //4：lpNumberOfBytesRecvd : 指向接收字节数的指针
+    //5：lpFlags ---一个指向 标志位的指针
+    //6：lpOverlapped ---指向重叠结构的指针  非重叠忽略
+    //7：指向操作结束后调用历程的指针       非重叠忽略
+    int n_ret = WSARecv(p_sock_data->m_sock, 
+                        &wsa_buf, 
+                        1, 
+                        &dw_byte_recv, 
+                        &dw_flags, 
+                        &(p_olap->m_olap), 
+                        NULL);
+    
+    //如果出错
+    if (n_ret != NO_ERROR && WSA_IO_PENDING != WSAGetLastError()) 
+    {
+        return -2;
+    }
+    
+    return 0;
+}
+
+int Iocp_Server::post_send(char* p_sz_buf, DWORD dw_byte_size)
+{
+    DWORD dw_send = 0;
+    //    CPerSocketData *pSockData = NULL;
+    //    COverLappedEx *pOverLapEx = NULL;
+    
+    //    //获取单个数据 对象数组的 第一个元素
+    //    POSITION pos = m_ArrSocketData.GetHeadPosition();
+    
+    //    while (pos != NULL) 
+    //    {
+    //        //获取单个数据 对象数组的 下一个元素
+    //        pSockData = m_ArrSocketData.GetNext(pos);
+    
+    //        if (pSockData->m_Socket != m_ListenSocket)
+    //        {
+    //            //新建 单个io数据对象  type是 write
+    //            pOverLapEx = new COverLappedEx(IO_TYPE_WRITE); 
+    
+    //            //参数1 目的缓冲区指针  2 目的缓冲区大小  3资源缓冲区  4：资源缓冲区大小
+    //            //把参数 缓冲区的数据 拷贝到 单个io对象 的缓冲区成员
+    //            memcpy_s(pOverLapEx->m_szBuf, MAX_BUF_SIZE, p_sz_buf, dw_byte_size);
+    
+    //            //把单个io数据对象的 两个对象赋值给 WSA 对象成员
+    //            WSABUF wsaBuf = {0};
+    //            wsaBuf.buf = pOverLapEx->m_szBuf;
+    //            wsaBuf.len = dw_byte_size;
+    //            m_ArrOverLapEx.AddTail(pOverLapEx);
+    
+    //            //发送参数里面的数据   指定重叠结构  
+    //            WSASend(pSockData->m_Socket, &wsaBuf, 1, &dw_send, 0, &(pOverLapEx->m_OLap), NULL);
+    //        }
+    //    }
+    return 0;
+}
+
+int Iocp_Server::thd_pool_func()
+{
+    //初始化 单句柄数据 和 单IO数据指针
+    Per_Sock_Data* p_psd = 0;
+    OverLapped_Ex* p_olaps = 0;
+    
+    //同步锁
+    InterlockedIncrement(&pThis->m_ThreadNums); 
+    
+    DWORD dw_trans = 0;      //传输字节数
+    BOOL B_io_ret = FALSE;   //返回值
+    
+    while (1) 
+    {
+        //检测停止标志        
+        if(b_stop_flag)
+        {
+            break;
+        }
+        
+        //arg1:h_iocp 2实际传输字节数 3单句柄指针 4单io指针 5超时时间
+        B_io_ret = GetQueuedCompletionStatus(this->m_h_iocp,              
+                                             &dw_trans, 
+                                             (PULONG_PTR)&p_psd, 
+                                             (LPOVERLAPPED *)&p_olaps, 
+                                             INFINITE);
+        //失败则继续
+        if (!B_io_ret) 
+        {
+            continue;
+        }
+        
+        if(0 != dw_trans || 0 == p_olaps || 0 == p_psd)
+        {
+            throw "bad ";
+        }
+        
+        if(B_io_ret && 0 != p_olaps && 0!= p_psd ) 
+        {
+            switch (p_olaps->m_IOType)
+            {
+            case IO_READ:           //如果收到数据
+                delete p_olaps;     //删除元素
+                this->post_recv();  //再一次发送recv请求 用当前的socket
+                break;
+                
+            case IO_WRITE:          //如果是写操作  
+                delete p_olaps;
+                break;
+               
+            default:
+                break;
+            }
+        }
+        else if ( 0 != p_olaps && 0 != p_psd
+                  ->...................................................................................................8) 
+        {
+            //exit the thread;
+            break;
+        }
+    }
+    
+    InterlockedDecrement(&pThis->m_ThreadNums);
+    return 0;    
+}
+
+void Iocp_Server::setB_stop_flag(bool value)
+{
+    b_stop_flag = value;
+}
